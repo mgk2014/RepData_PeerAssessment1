@@ -37,7 +37,7 @@ require(reshape)
 ### Task 1 - Load the physical activity data
 It is assumed that the source data resides in the current working directory
 ```{r}
-unzip(activity.zip")
+unzip("activity.zip")
 activity <- read.csv("activity.csv")
 activity$date <- as.Date(activity$date) # change the date field to a factor variable
 ```
