@@ -3,7 +3,8 @@
 #### Author - https://github.com/mgk2014/RepData_PeerAssessment1 
 #### Date Completed - 13-Sep-2014
 
-### Objective: 
+
+## Objective: 
 This assignment makes use of data from a personal activity monitoring device as collected by various devices such as Fitbit, Nike or Jawbone. The source data can be downloaded from - https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip
 
 The variables included in this dataset are:
@@ -15,18 +16,18 @@ The data contains missing values, these will be addressed will be addressed depe
 
 Using a series of R tools, we will explore the relationship between date, time interval and physical activity indicated in the observations. The R tools used in this assignment are ggplot2, plyr, and reshape
 
-### Assumptions
-It is assumed that the source data has been downloaded, unzipped and is located in the current working directory
+## Assumptions
+It is assumed that the source data has been downloaded and is located in the current working directory
 
-## Script
+# Script
 
-### Set Global Options for R markdown
+## Set Global Options for R markdown
 
 ```r
 opts_chunk$set(echo = TRUE, fig.width=12, fig.height=6, cache=TRUE)
 ```
 
-### Load the required libraries
+## Load the required libraries
 
 
 ```r
@@ -59,17 +60,18 @@ require(reshape)
 ##     rename, round_any
 ```
 
-### Task 1 - Load the physical activity data
+## Task 1 - Load the physical activity data
 It is assumed that the source data resides in the current working directory
 
 ```r
+unzip("activity.zip")
 activity <- read.csv("activity.csv")
 activity$date <- as.Date(activity$date) # change the date field to a factor variable
 ```
 
-### Task 2 - Mean and Total Number of Steps Taken Per Day
+## Task 2 - Mean and Total Number of Steps Taken Per Day
 
-#### 2a. Make a histogram of the total number of steps taken each day
+### 2a. Make a histogram of the total number of steps taken each day
 
 Use the PLYR package to compute the number of steps by day. Use ggplot bar to show the results
 
@@ -77,7 +79,7 @@ Use the PLYR package to compute the number of steps by day. Use ggplot bar to sh
 ```r
 totalStepsByDay <- ddply(activity, .(date), summarize, 
                         steps = sum(steps, na.rm=TRUE),
-                        dataSource = "originalData")
+                        dataSource = "Original Data")
 
 ggplot(totalStepsByDay, aes(date, steps)) + 
     geom_bar(stat = "identity") + 
@@ -86,7 +88,7 @@ ggplot(totalStepsByDay, aes(date, steps)) +
 
 ![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3.png) 
 
-#### 2b. Mean and median of number of steps per day
+### 2b. Mean and median of number of steps per day
 
 Use the PLYR pacakge to compute the average number of steps by time interval within the day. 
 
@@ -163,11 +165,12 @@ print(summary)
 ## 61 2012-11-30          NaN             NA
 ```
 
-Observation: While mean indicates a reasonable spread the median is 0 across the days. This could be due to large number of readins with 0 values.
+#### Observation: 
+While mean indicates a reasonable spread the median is 0 across the days. This is due to large number of readins with 0 values.
 
-### Task 3 - Average Daily Pattern
+## Task 3 - Average Daily Pattern
 
-#### 3a. Time series plot of 5 minute intervals
+### 3a. Time series plot of 5 minute intervals
 
 Time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
@@ -183,7 +186,7 @@ qplot(interval, mean, data = avgStepsByInterval,
 
 ![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5.png) 
 
-#### 3b. Time interval with maximum number of steps
+### 3b. Time interval with maximum number of steps
 
 
 ```r
@@ -191,11 +194,11 @@ timeInterval <- avgStepsByInterval[which.max(avgStepsByInterval$mean),1]
 ```
 Time interval with maximum number of steps is 835
 
-### TASK 4 - Imputing Missing Values
+## TASK 4 - Imputing Missing Values
 
 We will use the interval based mean averages to populate missing values. This will be computed using PLYR and a new data set will be created by merging average means, with the observations that contain missing values. The new data set will be merged with the original activity data set to create a newActivity data set
 
-#### 4a. Total number of missing values
+### 4a. Total number of missing values
 
 
 ```r
@@ -204,7 +207,7 @@ totalNARows <- nrow(naActivity)
 ```
 Total number of missing recordings for steps in the dataset is 2304
 
-#### 4b. Estimate missing values
+### 4b. Estimate missing values
 
 
 ```r
@@ -217,13 +220,13 @@ mergedIntevals$steps <- mergedIntevals$mean
 mergedIntevals$mean <- NULL
 ```
 
-#### 4c. Create new data set with estimated values
+### 4c. Create new data set with estimated values filled in
 
 ```r
 newActivity <- rbind(activity[!is.na(activity$steps), ], mergedIntevals )
 ```
 
-#### 4d. Plot new estimated values for missing values
+### 4d. Plot new estimated values for missing values
 Let us plot the newly updated and estimated values of number of steps, where values were missing.
 
 ```r
@@ -237,7 +240,8 @@ ggplot(newTotalStepsByDay, aes(date, steps)) +
 
 ![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10.png) 
 
-Observations: This histogram, does not do a good job of comparing the new estimated values to the original observations
+#### Observations
+This histogram, does not do a good job of comparing the new estimated values to the original observations
 
 #### Calculate the new mean, median and plot the difference with the original mean, median
 
@@ -330,15 +334,28 @@ ggplot(activityMelt, aes(date, value, group = variable)) +
 
 ![plot of chunk unnamed-chunk-12](figure/unnamed-chunk-12.png) 
 
+#### Observations
 The estimations indicate significant differences between medians, however the means do not show a significant change when compared to the original observations.
 
-Let us check if the number of steps have changed as a result of the estimations.
+### Change in total number of steps
+
+Check if the number of steps have changed as a result of the estimations.
+
+
+```r
+originalTotalSteps <- sum(activity$steps, na.rm=TRUE)
+newTotalSteps <- as.integer(sum(newActivity$steps))
+```
+
+The original total steps were 570608. The new total steps estimated were 656737.
+
+#### Plot the difference in total number of steps by day
 
 
 ```r
 newTotalStepsByDay <- ddply(newActivity, .(date), summarize, 
                             steps = sum(steps, na.rm=TRUE), 
-                            dataSource ="estimatedData")
+                            dataSource ="New Data with Imputed Estimations")
 newTotalStepsByDay <- rbind(newTotalStepsByDay, totalStepsByDay)
 
 ggplot(newTotalStepsByDay, aes(date, steps, group = dataSource)) +
@@ -346,13 +363,13 @@ ggplot(newTotalStepsByDay, aes(date, steps, group = dataSource)) +
     theme(axis.text.x = element_text(angle=45, hjust=1, size = 8))
 ```
 
-![plot of chunk unnamed-chunk-13](figure/unnamed-chunk-13.png) 
+![plot of chunk unnamed-chunk-14](figure/unnamed-chunk-14.png) 
 
-This plot better indicates the impact of newly estimated values, as the differences in totals before and after estimattions are significant.
+#### Observation: This plot better indicates the impact of newly estimated values, as the differences in totals before and after estimattions are significant.
 
-### TASK 5 - Differences in Activity Patters between weekday and weekends
+## TASK 5 - Differences in Activity Patters between weekday and weekends
 
-#### 5a. Impute weekday v/s weekend
+### 5a. Impute weekday v/s weekend
 
 Prepare data by determine weekday and then assigning weekday v/s weekend depending on the value of weekday
 
@@ -362,7 +379,7 @@ newActivity$weekday <- weekdays(newActivity$date)
 newActivity$weekday <- ifelse(newActivity$weekday %in% c("Sunday", "Saturday"), "Weekend", "Weekday")
 ```
 
-#### 5b. Create a panel plot
+### 5b. Create a panel plot
 
 Create a panel plot by calculating the value average # of steps by interval within the newly estimated data-set and split panels by weekday/weekend
 
@@ -378,4 +395,7 @@ ggplot(newAvgStepsByInterval, aes(interval, mean, fill = weekday)) +
          title = "Average number of steps by weekday/weekend")
 ```
 
-![plot of chunk unnamed-chunk-15](figure/unnamed-chunk-15.png) 
+![plot of chunk unnamed-chunk-16](figure/unnamed-chunk-16.png) 
+
+#### Observations
+Weekday/Weekend break indicates a higher number of average # of steps on weekday mornings, however a more uniform distribution during weekend days.
