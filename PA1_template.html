@@ -217,27 +217,8 @@ hljs.initHighlightingOnLoad();
 <h2>Load the required libraries</h2>
 
 <pre><code class="r">require(plyr)
-</code></pre>
-
-<pre><code>## Loading required package: plyr
-</code></pre>
-
-<pre><code class="r">require(ggplot2)
-</code></pre>
-
-<pre><code>## Loading required package: ggplot2
-</code></pre>
-
-<pre><code class="r">require(reshape)
-</code></pre>
-
-<pre><code>## Loading required package: reshape
-## 
-## Attaching package: &#39;reshape&#39;
-## 
-## The following objects are masked from &#39;package:plyr&#39;:
-## 
-##     rename, round_any
+require(ggplot2)
+require(reshape)
 </code></pre>
 
 <h2>Task 1 - Load the physical activity data</h2>
@@ -365,7 +346,7 @@ qplot(interval, mean, data = avgStepsByInterval,
 <pre><code class="r">timeInterval &lt;- avgStepsByInterval[which.max(avgStepsByInterval$mean),1]
 </code></pre>
 
-<p>Time interval with maximum number of steps is 835</p>
+<p>Time interval with maximum number of steps is 835 (hhmm)</p>
 
 <h2>TASK 4 - Imputing Missing Values</h2>
 

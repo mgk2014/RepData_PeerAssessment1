@@ -32,32 +32,8 @@ opts_chunk$set(echo = TRUE, fig.width=12, fig.height=6, cache=TRUE)
 
 ```r
 require(plyr)
-```
-
-```
-## Loading required package: plyr
-```
-
-```r
 require(ggplot2)
-```
-
-```
-## Loading required package: ggplot2
-```
-
-```r
 require(reshape)
-```
-
-```
-## Loading required package: reshape
-## 
-## Attaching package: 'reshape'
-## 
-## The following objects are masked from 'package:plyr':
-## 
-##     rename, round_any
 ```
 
 ## Task 1 - Load the physical activity data
@@ -192,7 +168,7 @@ qplot(interval, mean, data = avgStepsByInterval,
 ```r
 timeInterval <- avgStepsByInterval[which.max(avgStepsByInterval$mean),1]
 ```
-Time interval with maximum number of steps is 835
+Time interval with maximum number of steps is 835 (hhmm)
 
 ## TASK 4 - Imputing Missing Values
 
