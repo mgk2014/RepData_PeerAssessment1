@@ -168,7 +168,7 @@ qplot(interval, mean, data = avgStepsByInterval,
 ```r
 timeInterval <- avgStepsByInterval[which.max(avgStepsByInterval$mean),1]
 ```
-Time interval with maximum number of steps is 835 (hhmm)
+Time interval with maximum number of steps is 835 (expressed as 'hhmm')
 
 ## TASK 4 - Imputing Missing Values
 
@@ -365,7 +365,7 @@ newAvgStepsByInterval <- ddply(newActivity, .( weekday, interval), summarize,
             mean = mean(steps, na.rm=TRUE))
 
 ggplot(newAvgStepsByInterval, aes(interval, mean, fill = weekday)) +
-    geom_bar(stat = "identity") +
+    geom_line(stat = "identity") +
     facet_wrap(~ weekday) + 
     labs(x = "interval (hhmm)", y = "Average # of steps",
          title = "Average number of steps by weekday/weekend")
