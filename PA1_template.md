@@ -1,7 +1,6 @@
 ## Coursera - Data Science 
 ## Reproducible Research - Assignment 1
 #### Author - https://github.com/mgk2014/RepData_PeerAssessment1 
-#### Date Completed - 13-Sep-2014
 
 
 ### Objective: 
